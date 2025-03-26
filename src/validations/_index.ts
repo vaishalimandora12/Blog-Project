@@ -1,8 +1,8 @@
-// import { userSignup, userLogin, UserOtpVerify, userLogout, userSendOtp, UserSocialLogin, userProfileUpdate, sendFeedback, getAllUsers, addAddress, addCard } from "./userAuthentication";
+import { userSignup ,userLogin} from "./userValidation";
 
-// export const user = {
-//     userSignup,
-//     userLogin,
-// };
+export const user = {
+    userSignup,
+    userLogin
+};
 
 

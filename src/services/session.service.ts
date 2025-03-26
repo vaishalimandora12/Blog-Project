@@ -1,15 +1,11 @@
 import * as db from "../model/_index";
 import { user } from "../interface/user.interface"; 
 import bcryptjs from "bcryptjs";
-class userService {
+class sessionService {
 
     async create(payload: any): Promise<any> {
         try {
-            const salt: any = await bcryptjs.genSalt(10);
-            if (payload["password"]) {
-                payload["password"] = await bcryptjs.hash(payload["password"], salt);
-            }
-            return await db.userModel.create(payload);
+            return await db.sessionModel.create(payload);
         } catch (error) {
             throw error;
         }
@@ -18,7 +14,7 @@ class userService {
 
     async find(): Promise<user[]> {
         try {
-            return await db.userModel.find();
+            return await db.sessionModel.find();
         } catch (error) {
             throw error;
         }
@@ -26,7 +22,7 @@ class userService {
 
     async deleteOne(userId: string): Promise<any> {
         try {
-            return await db.userModel.deleteOne({ _id: userId });
+            return await db.sessionModel.deleteOne({ _id: userId });
         } catch (error) {
             throw error;
         }
@@ -34,7 +30,7 @@ class userService {
 
     async updateOne(query:any, payload: any): Promise<any> {
         try {
-            return await db.userModel.updateOne({ _id: query }, payload);
+            return await db.sessionModel.updateOne( query, payload, { upsert: true });
         } catch (error) {
             throw error;
         }
@@ -42,11 +38,11 @@ class userService {
 
     async findOne(query: any): Promise<any> {
         try {
-            return await db.userModel.findOne(query);
+            return await db.sessionModel.findOne(query);
         } catch (error) {
             throw error;
         }
     }
 }
 
-export const UserService = new userService();
+export const SessionService = new sessionService();

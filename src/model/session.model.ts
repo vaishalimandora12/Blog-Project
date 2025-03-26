@@ -21,6 +21,10 @@ let sessionSchema = new mongoose.Schema(
             type: String,
             default: null,
         },
+        refershToken: {
+            type: String,
+            default: null,
+        },
         userId: {
             type: Schema.Types.ObjectId,
             ref: "users",

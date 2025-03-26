@@ -30,14 +30,6 @@ let UserSchema = new mongoose.Schema(
             lowercase: true,
             // set: (value) => value.toLowerCase(),
         },
-        countryCode: {
-            type: String,
-            default: null,
-        },
-        phoneNumber: {
-            type: String,
-            default: null,
-        },
         userId: {
             type: Number,
         },
@@ -49,32 +41,6 @@ let UserSchema = new mongoose.Schema(
             type: String,
             enum: [enumType.userBlockStatus.blocked, enumType.userBlockStatus.unBlocked],
             default: enumType.userBlockStatus.unBlocked,
-        },
-        address: {
-            addressLine1: {
-                type: String,
-                default: "",
-            },
-            addressLine2: {
-                type: String,
-                default: "",
-            },
-            city: {
-                type: String,
-                default: "",
-            },
-            state: {
-                type: String,
-                default: "",
-            },
-            zipCode: {
-                type: String,
-                default: "",
-            },
-            location: {
-                type: { type: String },
-                coordinates: Array,
-            },
         },
     },
     { timestamps: true }

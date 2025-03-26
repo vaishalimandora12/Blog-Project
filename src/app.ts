@@ -1,5 +1,6 @@
 import express, { Application as ExApplication } from "express";
 import cors from "cors";
+import { userRoutes } from "./routes/user.routes";
 
 // import { check_active_user, check_session, update_active_user } from "./middleware/checkActive.middleware";
 
@@ -14,7 +15,7 @@ class Application {
             this._instance.use(express.json());
 
             // this._instance.use("/api/user/private/", JWT_TOKEN, check_active_user, check_session, update_active_user);
-            // this._instance.use("/api/user/", userRoutes);
+            this._instance.use("/api/user/", userRoutes);
       }
 }
 export default new Application();
