@@ -43,6 +43,14 @@ class sessionService {
             throw error;
         }
     }
+
+    async deleteSession(query: Object): Promise<any> {
+        try {
+            return await db.sessionModel.deleteMany(query);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export const SessionService = new sessionService();

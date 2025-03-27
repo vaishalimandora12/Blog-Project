@@ -86,3 +86,10 @@ export const userLogin = [
     check("deviceName")
         .notEmpty().withMessage(_infoMessaage.required())
 ];
+
+
+export const refereshToken = [
+
+    check("refreshToken")
+        .notEmpty().withMessage(_infoMessaage.required())
+];

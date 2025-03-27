@@ -2,17 +2,20 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { userModel } from "../model/user.model";
 import "dotenv/config";
 import { user } from "../interface/user.interface";
-const JWT_key = "test";
+
+const JWT_KEY = "test";
+const JWT_EXPIRY = "60s";
+
 const REFRESH_TOKEN_SECRET = "refresh_secret"; 
-const REFRESH_TOKEN_EXPIRY = "7d";
+const REFRESH_TOKEN_EXPIRY = "365d"; 
 
 class jsonWebTokenService {
-      constructor() {
-      }
+      constructor() {}
+
       createJwtToken(payload: any) {
             return new Promise(async (resolve, reject) => {
                   try {
-                        const token = await jwt.sign(payload, JWT_key);
+                        const token = await jwt.sign(payload, JWT_KEY, { expiresIn: JWT_EXPIRY });
                         if (token) {
                               resolve(token);
                         } else {
@@ -36,40 +39,56 @@ class jsonWebTokenService {
       }
 
       _tokenDecode = (req: any): Promise<any> => {
-            var token = req.headers.authorization.split(" ")[1];
             return new Promise(async (resolve, reject) => {
-                  try {
-                        if (!req.headers.authorization.startsWith("Bearer")) reject({ message: "Invalid Token" });
-                        var decode: any = jwt.verify(token, JWT_key);
-                        if (!decode) reject("Invalid token");
-                        let userId = decode.userId;
-                        const user = await userModel.findOne({ _id: userId });
-                        if (!user) reject("Invalid token");
-                        req["userInfo"] = user;
-
-                        resolve(user);
-                  } catch (error) {
-                        reject(error);
-                  }
+                try {
+                    if (!req.headers.authorization) {
+                        return reject({ message: "authorization is required.." });
+                    }
+        
+                    if (!req.headers.authorization.startsWith("Bearer ")) {
+                        return reject({ message: "Invalid token format" });
+                    }
+        
+                    const token = req.headers.authorization.split(" ")[1];
+                    const decode: any = jwt.verify(token, JWT_KEY);
+                    if (!decode) return reject({ message: "Invalid token" });
+        
+                    const user = await userModel.findOne({ _id: decode.userId });
+                    if (!user) return reject({ message: "User not found" });
+        
+                    req["userInfo"] = user;
+                    resolve(user);
+                } catch (error) {
+                    reject(error);
+                }
             });
-      };
-      _userJwtToken = (req: any): Promise<user> => {
-            var token = req.headers.authorization.split(" ")[1];
+        };
+        
+        _userJwtToken = (req: any): Promise<any> => {
             return new Promise(async (resolve, reject) => {
-                  try {
-                        if (!req.headers.authorization.startsWith("Bearer")) reject({ message: "Invalid Token" });
-                        var decode: any = jwt.verify(token, JWT_key);
-                        if (!decode) reject({message:"Invalid token"});
-                        let userId = decode.userId;
-                        const user = await userModel.findOne({ _id: userId });
-                        if (!user) reject({message:"Invalid token"});
-                        resolve(token);
-                  } catch (error) {
-                        console.log(error);
-                        reject(error);
-                  }
+                try {
+                    if (!req.headers.authorization) {
+                        return reject({ message: "Authorization header is missing" });
+                    }
+        
+                    if (!req.headers.authorization.startsWith("Bearer ")) {
+                        return reject({ message: "Invalid token format" });
+                    }
+        
+                    const token = req.headers.authorization.split(" ")[1];
+                    const decode: any = jwt.verify(token, JWT_KEY);
+                    if (!decode) return reject({ message: "Invalid token" });
+        
+                    const user = await userModel.findOne({ _id: decode.userId });
+                    if (!user) return reject({ message: "User not found" });
+        
+                    resolve(token);
+                } catch (error) {
+                    reject(error);
+                }
             });
-      };
+        };
+        
 
       decodeRefreshToken(token: string): Promise<any> {
             return new Promise(async (resolve, reject) => {

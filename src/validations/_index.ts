@@ -1,8 +1,11 @@
-import { userSignup ,userLogin} from "./userValidation";
+import { userSignup ,userLogin,refereshToken} from "./userValidation";
+import { createBlog } from "./blogValidation"
 
 export const user = {
     userSignup,
-    userLogin
+    userLogin,
+    createBlog,
+    refereshToken
 };
 
 

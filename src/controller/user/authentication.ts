@@ -95,9 +95,49 @@ class authenticationController {
             });
     
         } catch (error: any) {
-            return res.status(500).json({ status: "error", message: error.message });
+            let resObj = {
+                status: _httpStatusService.status.serverError,
+                message: error.message,
+            };
+            return res.status(_httpStatusService.status.serverError).json(resObj);
         }
     };
+
+     async refreshToken(req: Request, res: Response){
+        try {
+            const { refreshToken } = req.body;
+            if (!refreshToken) {
+                return res.status(_httpStatusService.status.Unauthorized).json({ status: _httpStatusService.status.Unauthorized, message: "Refresh token is required" });
+            }
+            const user = await JsonWebTokenService.decodeRefreshToken(refreshToken);
+            if (!user) {
+                return res.status(_httpStatusService.status.Unauthorized).json({ 
+                    status: _httpStatusService.status.Unauthorized, 
+                    message: "Invalid refresh token"
+                 });
+            }
+            const newAccessToken = await JsonWebTokenService.createJwtToken({ userId: user._id });
+            const newRefreshToken = await JsonWebTokenService.createRefreshToken({ userId: user._id });
+            await SessionService.updateOne({userId:new mongoose.Types.ObjectId(user._id)},{
+                accessToken: newAccessToken,
+                refershToken: newRefreshToken,
+
+            });
+    
+            return res.status(_httpStatusService.status.OK).json({
+                status: _httpStatusService.status.OK,
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+                message: "Token refreshed successfully",
+            });
+        }  catch (error: any) {
+            let resObj = {
+                status: _httpStatusService.status.serverError,
+                message: error.message,
+            };
+            return res.status(_httpStatusService.status.serverError).json(resObj);
+        }
+    }
 }
 
 export const AuthenticationController = new authenticationController();
