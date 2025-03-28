@@ -6,6 +6,8 @@ export interface user {
     lastName?: string;
     password?: string;
     email?: string;
+    countryCode?: string;
+    phoneNumber?: string;
     userId?: number;
     socialLogin?: boolean;
     status?: string;
