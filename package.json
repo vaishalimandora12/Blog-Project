@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node dist/server",
     "winWatch": "nodemon server.ts",
-    "test": "karma start",
     "dev": "webpack-dev-server --inline --hot",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -33,15 +33,21 @@
     "mongoose-paginate-v2": "^1.9.0",
     "mongoose-sequence": "^6.0.1",
     "node-cron": "^3.0.3",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/jasmine": "^5.1.7",
+    "@types/jest": "^29.5.14",
+    "@types/supertest": "^6.0.3",
     "jasmine-core": "^5.6.0",
+    "jest": "^29.7.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-jasmine": "^5.1.0",
     "karma-webpack": "^5.0.1",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.3.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.2",
     "webpack": "^5.98.0",

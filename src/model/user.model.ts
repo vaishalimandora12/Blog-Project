@@ -11,7 +11,6 @@ let UserSchema = new mongoose.Schema(
         userType: {
             type: String,
             enum: [enumType.userType.user, enumType.userType.admin],
-            required: true,
         },
         firstName: {
             type: String,

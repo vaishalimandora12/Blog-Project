@@ -85,7 +85,7 @@ class authenticationController {
             });
 
             return res.status(200).json({
-                status: "success",
+                status: _httpStatusService.status.OK,
                 message: "Login successfully",
                 data: {
                     user: user,
